@@ -32,8 +32,10 @@ json_response_weather = JSON.parse(raw_respnse_weather)
 
 currently_hash = json_response_weather.fetch("currently")
 current_temp = currently_hash.fetch("temperature")
+summary = currently_hash.fetch("summary")
 
 p "It is currently #{current_temp}°F."
+p "It is currently: #{summary}"
 
 hourly_hash = json_response_weather.fetch("hourly")
 hourly_date = hourly_hash.fetch("data")
@@ -44,7 +46,7 @@ precipitation_array = Array.new
 11.times do hour_data
   each_hour = hourly_date[hour_data]
   precipitation_chance = each_hour.fetch("precipProbability")
-  precipitation = precipitation_chance*100.to_i
+  precipitation = precipitation_chance*100.round(0)
   precipitation_array = precipitation_array.push(precipitation)
   p "In #{hour_data} hours, there is a #{precipitation}% chance of precipitation."
   hour_data = hour_data + 1
