@@ -40,16 +40,18 @@ p "It is currently: #{summary}"
 hourly_hash = json_response_weather.fetch("hourly")
 hourly_date = hourly_hash.fetch("data")
 
-hour_data = 1
 precipitation_array = Array.new
 
-11.times do hour_data
+12.times do |hour_data|
   each_hour = hourly_date[hour_data]
   precipitation_chance = each_hour.fetch("precipProbability")
-  precipitation = precipitation_chance*100.round(0)
+  data_time = Time.at(each_hour.fetch("time"))
+  seconds_diff = data_time - Time.now
+  hour_diff = (seconds_diff / 60 / 60).round
+  precipitation = (precipitation_chance*100).round
   precipitation_array = precipitation_array.push(precipitation)
-  p "In #{hour_data} hours, there is a #{precipitation}% chance of precipitation."
-  hour_data = hour_data + 1
+  p "In #{hour_diff} hours, there is a #{precipitation}% chance of precipitation."
+
 end
 
 if precipitation_array.any? { |value| value > 10 }
@@ -57,6 +59,8 @@ if precipitation_array.any? { |value| value > 10 }
 else 
   p "You probably won't need an umbrella today."
 end
+
+
 
 # hour1 = hourly_date[2]
 # p time = Time.at(hour1.fetch("time"))
